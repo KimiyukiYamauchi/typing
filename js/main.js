@@ -18,6 +18,15 @@ function toHalfWidth(str) {
     }).replace(/　/g, ' ');
 }
 
+/**
+ * 半角スペースを見える文字に変換する関数
+ * @param {string} str - 変換する文字列
+ * @returns {string} - 見える文字に変換された文字列
+ */
+function replaceSpaces(str) {
+    return str.replace(/ /g, '█');
+}
+
 let patterns = [];
 let currentPatternIndex = 0;
 let currentKeyIndex = 0;
@@ -35,14 +44,14 @@ const patternCounterDiv = document.getElementById('pattern-counter'); // パタ�
 function updateTarget() {
     const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex]));
     const completed = currentPattern.slice(0, currentKeyIndex).map((char, index) => {
-        return `<span class="correct">${char}</span>`;
+        return `<span class="char correct">${replaceSpaces(char)}</span>`;
     }).join('');
     const nextChar = currentPattern[currentKeyIndex] ? 
                         (incorrectIndices.has(currentKeyIndex) ? 
-                            `<span class="next incorrect">${currentPattern[currentKeyIndex]}</span>`
-                             : `<span class="next">${currentPattern[currentKeyIndex]}</span>`)
+                            `<span class="char next incorrect">${replaceSpaces(currentPattern[currentKeyIndex])}</span>`
+                             : `<span class="char next">${replaceSpaces(currentPattern[currentKeyIndex])}</span>`)
                              : '';
-    const remaining = currentPattern.slice(currentKeyIndex + 1).join('');
+    const remaining = currentPattern.slice(currentKeyIndex + 1).map(char => `<span class="char">${replaceSpaces(char)}</span>`).join('');
     targetDiv.innerHTML = `${completed}${nextChar}${remaining}`;
     updatePatternCounter(); // パターンカウンターを更新
 }
@@ -68,19 +77,19 @@ function handleInput() {
     if (inputValue === currentPattern[currentKeyIndex]) {
         correctCount++;
         currentKeyIndex++;
-        echoText += inputValue; // 正解の場合にエコーバックテキストを追加
+        echoText += `<span class="char">${replaceSpaces(inputValue)}</span>`; // 正解の場合にエコーバックテキストを追加
         inputField.value = ''; // 正解の場合にのみクリア
         incorrectIndices.delete(currentKeyIndex - 1); // 正解したら間違いインデックスを削除
     } else {
         incorrectIndices.add(currentKeyIndex); // 間違いインデックスを追加
     }
-    echoDiv.innerHTML = echoText + inputField.value + '<span class="cursor">_</span>'; // 入力値をエコーバック
+    echoDiv.innerHTML = echoText + `<span class="char">${replaceSpaces(inputField.value)}</span><span class="cursor">|</span>`; // 入力値をエコーバック
     totalCount++;
     if (currentKeyIndex === currentPattern.length) {
         currentPatternIndex++;
         currentKeyIndex = 0;
         echoText = ''; // 新しいパターンに進むときにエコーバックテキストをクリア
-        echoDiv.innerHTML = '<span class="cursor">_</span>'; // 新しいパターンに進むときにエコーバックをクリアし、アンダースコアを表示
+        echoDiv.innerHTML = '<span class="cursor">|</span>'; // 新しいパターンに進むときにエコーバックをクリアし、アンダースコアを表示
         incorrectIndices.clear(); // 新しいパターンに進むときにクリア
         if (currentPatternIndex === patterns.length) {
             showFinalResult();
@@ -109,5 +118,5 @@ fetch('pattern.json')
     .catch(error => console.error('Error loading patterns:', error));
 
 updateTarget();
-echoDiv.innerHTML = '<span class="cursor">_</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
+echoDiv.innerHTML = '<span class="cursor">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
 updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新

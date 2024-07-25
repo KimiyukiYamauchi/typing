@@ -29,7 +29,6 @@ body {
     font-size: 24px;
     margin-bottom: 20px;
     color: black;
-    letter-spacing: 0.1em; /* 文字間を少し開ける */
 }
 
 #echo {
@@ -42,7 +41,6 @@ body {
     font-size: 24px;
     margin-bottom: 20px;
     color: black;
-    letter-spacing: 0.1em; /* targetと同じ文字間隔にする */
 }
 
 #input {
@@ -80,4 +78,23 @@ body {
 
 .cursor {
     color: black; /* アンダースコアの色を設定 */
+
+}
+
+.cursor {
+    display: inline-block;
+    /* width: 1ch; */
+    /* background-color: black; */
+    animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+span.char {
+    padding: 0 0.1em; /* 文字間隔を均等に設定 */
+    margin: 0 0.1em; /* 文字間隔を均等に設定 */
 }
