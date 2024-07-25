@@ -62,11 +62,13 @@ function updatePatternCounter() {
 
 function showFinalResult() {
     const accuracy = (correctCount / totalCount) * 100;
-    resultDiv.textContent = `正答率: ${accuracy.toFixed(2)}%`;
+    resultDiv.innerHTML = `基本入力練習 -英字小文字のみ- :<br>正答率 ${accuracy.toFixed(2)}%`;
     targetDiv.classList.add('hidden'); // #targetを非表示にする
     echoDiv.classList.add('hidden'); // #echoを非表示にする
     inputField.classList.add('hidden'); // #inputを非表示にする
     patternCounterDiv.classList.add('hidden'); // #pattern-counterを非表示にする
+    document.querySelector('h1').classList.add('hidden'); // タイトルを非表示にする
+    document.querySelector('p').classList.add('hidden'); // 注意事項を非表示にする
     inputField.removeEventListener('input', handleInput); // キー入力を受け付けないようにする
 }
 
