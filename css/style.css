@@ -1,0 +1,68 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+}
+
+.container {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+#target {
+    width: 800px;
+    height: 30px;
+    margin: 0 auto;
+    padding: 20px; /* コンテナ内の余白を追加 */
+    border-radius: 10px; /* 角を丸くする */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 影を追加 */
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black;
+    letter-spacing: 0.1em; /* 文字間を少し開ける */
+}
+
+#echo {
+    width: 800px;
+    height: 30px;
+    margin: 0 auto;
+    padding: 20px; /* コンテナ内の余白を追加 */
+    border-radius: 10px; /* 角を丸くする */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 影を追加 */
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: black;
+    letter-spacing: 0.1em; /* targetと同じ文字間隔にする */
+}
+
+#input {
+    font-size: 24px; /* デバッグのために表示 */
+    margin-top: 20px; /* 表示位置をずらす */
+    position: absolute;
+    /* left: -9999px; 見えない位置に移動 */
+    left: 10px; /* 見えない位置に移動 */
+}
+
+.correct {
+    color: blue;
+}
+
+.incorrect {
+    color: red;
+}
+
+.next {
+    background-color: yellow; /* 次の入力を強調表示 */
+}
+
+.hidden {
+    display: none; /* 非表示にする */
+}
+
+.cursor {
+    color: black; /* アンダースコアの色を設定 */
+}
