@@ -13,6 +13,12 @@ body {
     margin: 0 auto;
 }
 
+#pattern-counter {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
 #target {
     width: 800px;
     height: 30px;
@@ -45,6 +51,15 @@ body {
     position: absolute;
     left: -9999px; /* 見えない位置に移動 */
     /*left: 10px;  見える位置に移動 */
+}
+
+#result {
+    font-size: 48px; /* 大きく表示 */
+    text-align: center; /* 中央揃え */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .correct {

@@ -57,6 +57,7 @@ function showFinalResult() {
     targetDiv.classList.add('hidden'); // #targetを非表示にする
     echoDiv.classList.add('hidden'); // #echoを非表示にする
     inputField.classList.add('hidden'); // #inputを非表示にする
+    patternCounterDiv.classList.add('hidden'); // #pattern-counterを非表示にする
     inputField.removeEventListener('input', handleInput); // キー入力を受け付けないようにする
 }
 
