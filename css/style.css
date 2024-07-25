@@ -43,8 +43,8 @@ body {
     font-size: 24px; /* デバッグのために表示 */
     margin-top: 20px; /* 表示位置をずらす */
     position: absolute;
-    /* left: -9999px; 見えない位置に移動 */
-    left: 10px; /* 見えない位置に移動 */
+    left: -9999px; /* 見えない位置に移動 */
+    /*left: 10px;  見える位置に移動 */
 }
 
 .correct {

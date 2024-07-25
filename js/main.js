@@ -103,6 +103,11 @@ function handleInput() {
 
 inputField.addEventListener('input', handleInput);
 
+// 画面をクリックするとinputにフォーカスする処理を追加
+document.addEventListener('click', () => {
+    inputField.focus();
+});
+
 updateTarget();
 echoDiv.innerHTML = '<span class="cursor">_</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
 updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
