@@ -18,19 +18,7 @@ function toHalfWidth(str) {
     }).replace(/　/g, ' ');
 }
 
-const patterns = [
-    'ａｂｃｄ　ｅｆｇ　ｈｉｊｋ　ｌｍｎ　ｏｐｑｒ　ｓｔｕ　ｖｗ　ｘｙｚ',
-    'ａａａａａ　ｂｂｂｂｂ　ａａｂｂａａｂｂ　ａｂａｂａｂ',
-    'ｃｃｃｃｃ　ａａｂｂｃｃ　ａｂｃａｂｃ　ａｂｃａｂｃ',
-    'ｄｄｄｄｄ　ｅｅｆｆｅｅ　ｅｆｄｅｆｅｆ　ｅｆｄｅｆｅｆ',
-    'ｇｇｇｇｇ　ｈｈｉｉｈｈ　ｉｈｇｉｈｇ　ｉｈｇｉｈｇ',
-    'ｊｊｊｊｊ　ｋｋｌｌｋｋ　ｋｌｊｋｌｋ　ｋｌｊｋｌｋ',
-    'ｍｍｍｍｍ　ｎｎｏｏｎｎ　ｏｎｍｏｎｎ　ｏｎｍｏｎｎ',
-    'ｐｐｐｐｐ　ｑｑｒｒｑｑ　ｑｒｐｑｒｑｑ　ｑｒｐｑｒｑｑ',
-    'ｓｓｓｓｓ　ｔｔｕｕｔｔ　ｕｔｓｕｔｔ　ｕｔｓｕｔｔ',
-    'ｖｖｖｖｖ　ｗｗｘｘｗｗ　ｗｘｖｗｘｗｗ　ｗｘｖｗｘｗｗ',
-    'ｙｙｙｙｙ　ｚｚａａｚｚ　ａｚｙａｚｚ　ａｚｙａｚｚ',
-];
+let patterns = [];
 let currentPatternIndex = 0;
 let currentKeyIndex = 0;
 let correctCount = 0;
@@ -107,6 +95,17 @@ inputField.addEventListener('input', handleInput);
 document.addEventListener('click', () => {
     inputField.focus();
 });
+
+// pattern.jsonファイルからデータを取得
+fetch('pattern.json')
+    .then(response => response.json())
+    .then(data => {
+        patterns = data.patterns;
+        updateTarget();
+        echoDiv.innerHTML = '<span class="cursor">_</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
+        updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
+    })
+    .catch(error => console.error('Error loading patterns:', error));
 
 updateTarget();
 echoDiv.innerHTML = '<span class="cursor">_</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
