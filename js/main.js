@@ -97,6 +97,7 @@ function handleInput() {
         }
     }
     updateTarget();
+    inputField.focus(); // 入力フィールドにフォーカスを戻す
 }
 
 inputField.addEventListener('input', handleInput);

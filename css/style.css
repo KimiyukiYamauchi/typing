@@ -49,6 +49,7 @@ body {
     position: absolute;
     left: -9999px; /* 見えない位置に移動 */
     /*left: 10px;  見える位置に移動 */
+    z-index: -1; /* フォーカスを受け取るためにz-indexを設定 */
 }
 
 #result {
