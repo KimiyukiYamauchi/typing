@@ -133,7 +133,6 @@ fetch('pattern.json')
     })
     .catch(error => console.error('Error loading patterns:', error));
 
-updateTarget();
 echoDiv.innerHTML = '<span class="cursor">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
 updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
 updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新
