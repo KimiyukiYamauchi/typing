@@ -40,6 +40,7 @@ const echoDiv = document.getElementById('echo'); // 新しいdivを取得
 const inputField = document.getElementById('input');
 const resultDiv = document.getElementById('result');
 const patternCounterDiv = document.getElementById('pattern-counter'); // パターンカウンターのdivを取得
+const accuracyDisplayDiv = document.getElementById('accuracy-display'); // 正解率表示エリアを取得
 
 function updateTarget() {
     const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex]));
@@ -54,10 +55,20 @@ function updateTarget() {
     const remaining = currentPattern.slice(currentKeyIndex + 1).map(char => `<span class="char">${replaceSpaces(char)}</span>`).join('');
     targetDiv.innerHTML = `${completed}${nextChar}${remaining}`;
     updatePatternCounter(); // パターンカウンターを更新
+    updateAccuracyDisplay(); // 正解率表示を更新
 }
 
 function updatePatternCounter() {
     patternCounterDiv.textContent = `パターン ${currentPatternIndex + 1} / ${patterns.length}`;
+}
+
+function updateAccuracyDisplay() {
+    let accuracyText = '正答率: ー';
+    if (totalCount > 0) {
+        const accuracy = (correctCount / totalCount) * 100;
+        accuracyText = `正答率: ${accuracy.toFixed(2)}%`;
+    }
+    accuracyDisplayDiv.textContent = accuracyText;
 }
 
 function showFinalResult() {
@@ -67,6 +78,7 @@ function showFinalResult() {
     echoDiv.classList.add('hidden'); // #echoを非表示にする
     inputField.classList.add('hidden'); // #inputを非表示にする
     patternCounterDiv.classList.add('hidden'); // #pattern-counterを非表示にする
+    accuracyDisplayDiv.classList.add('hidden'); // 正解率表示エリアを非表示にする
     document.querySelector('h1').classList.add('hidden'); // タイトルを非表示にする
     document.querySelector('p').classList.add('hidden'); // 注意事項を非表示にする
     inputField.removeEventListener('input', handleInput); // キー入力を受け付けないようにする
@@ -117,9 +129,11 @@ fetch('pattern.json')
         updateTarget();
         echoDiv.innerHTML = '<span class="cursor">_</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
         updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
+        updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新
     })
     .catch(error => console.error('Error loading patterns:', error));
 
 updateTarget();
 echoDiv.innerHTML = '<span class="cursor">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
 updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
+updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新

@@ -13,9 +13,20 @@ body {
     margin: 0 auto;
 }
 
+#pattern-counter-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
 #pattern-counter {
     font-size: 20px;
-    margin-bottom: 10px;
+    text-align: center;
+    margin-right: 20px; /* 右側に余白を追加 */
+}
+
+#accuracy-display {
+    font-size: 20px;
     text-align: center;
 }
 
@@ -48,7 +59,6 @@ body {
     margin-top: 20px; /* 表示位置をずらす */
     position: absolute;
     left: -9999px; /* 見えない位置に移動 */
-    /*left: 10px;  見える位置に移動 */
     z-index: -1; /* フォーカスを受け取るためにz-indexを設定 */
 }
 
