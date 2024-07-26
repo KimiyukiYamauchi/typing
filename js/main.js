@@ -27,13 +27,36 @@ function replaceSpaces(str) {
     return str.replace(/ /g, '█');
 }
 
+// パターンの配列
 let patterns = [];
+
+// 現在のパターンのインデックス
 let currentPatternIndex = 0;
+
+// 現在のキーのインデックス
 let currentKeyIndex = 0;
+
+// 正解数
 let correctCount = 0;
+
+// 総入力数
 let totalCount = 0;
+
+// 間違いインデックスのセット
 let incorrectIndices = new Set();
+
+// エコーバックテキスト
 let echoText = '';
+
+// ステップサイズ
+// let stepSize = 10; // ステップサイズを10に設定
+let stepSize = 2; // debug
+
+// 現在のステップ
+let currentStep = 0;
+
+// ステップごとの正解率を管理するオブジェクト
+let stepAccuracy = {};
 
 const targetDiv = document.getElementById('target');
 const echoDiv = document.getElementById('echo'); // 新しいdivを取得
@@ -41,9 +64,10 @@ const inputField = document.getElementById('input');
 const resultDiv = document.getElementById('result');
 const patternCounterDiv = document.getElementById('pattern-counter'); // パターンカウンターのdivを取得
 const accuracyDisplayDiv = document.getElementById('accuracy-display'); // 正解率表示エリアを取得
+const stepNameDiv = document.getElementById('step-name'); // ステップ名表示エリアを取得
 
 function updateTarget() {
-    const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex]));
+    const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex].pattern));
     const completed = currentPattern.slice(0, currentKeyIndex).map((char, index) => {
         return `<span class="char correct">${replaceSpaces(char)}</span>`;
     }).join('');
@@ -56,19 +80,50 @@ function updateTarget() {
     targetDiv.innerHTML = `${completed}${nextChar}${remaining}`;
     updatePatternCounter(); // パターンカウンターを更新
     updateAccuracyDisplay(); // 正解率表示を更新
+    updateStepName(); // ステップ名を更新
 }
 
 function updatePatternCounter() {
-    patternCounterDiv.textContent = `パターン ${currentPatternIndex + 1} / ${patterns.length}`;
+    const stepPatterns = patterns.filter(p => p.stepname === patterns[currentPatternIndex].stepname);
+    const stepPatternIndex = stepPatterns.findIndex(p => p.pattern === patterns[currentPatternIndex].pattern);
+    patternCounterDiv.textContent = `パターン ${stepPatternIndex + 1} / ${stepPatterns.length}`;
 }
 
 function updateAccuracyDisplay() {
     let accuracyText = '正答率: ー';
-    if (totalCount > 0) {
-        const accuracy = (correctCount / totalCount) * 100;
+    const stepPatterns = patterns.filter(p => p.stepname === patterns[currentPatternIndex].stepname);
+    console.log(stepPatterns);
+    const stepTotalCount = stepPatterns.reduce((acc, p, index) => {
+        if (index < currentPatternIndex) {
+            acc += p.totalCount || 0;
+        }
+        return acc;
+    }, totalCount);
+    const stepCorrectCount = stepPatterns.reduce((acc, p, index) => {
+        if (index < currentPatternIndex) {
+            acc += p.correctCount || 0;
+        }
+        return acc;
+    }, correctCount);
+
+    if (stepTotalCount > 0) {
+        const accuracy = (stepCorrectCount / stepTotalCount) * 100;
         accuracyText = `正答率: ${accuracy.toFixed(2)}%`;
     }
     accuracyDisplayDiv.textContent = accuracyText;
+}
+
+function updateStepName() {
+    const stepName = patterns[currentPatternIndex].stepname;
+    stepNameDiv.textContent = stepName ? `ステップ: ${stepName}` : 'ステップ: ー';
+}
+
+function saveStepAccuracy() {
+    const accuracy = (correctCount / totalCount) * 100;
+    stepAccuracy[currentStep] = accuracy.toFixed(2);
+    localStorage.setItem('stepAccuracy', JSON.stringify(stepAccuracy));
+    // patterns[currentPatternIndex].totalCount = totalCount;
+    // patterns[currentPatternIndex].correctCount = correctCount;
 }
 
 function showFinalResult() {
@@ -84,16 +139,21 @@ function showFinalResult() {
     inputField.removeEventListener('input', handleInput); // キー入力を受け付けないようにする
 }
 
+function clearPatternCounterContainer() {
+    patternCounterDiv.textContent = '';
+    accuracyDisplayDiv.textContent = '';
+}
+
 function handleInput() {
     const inputValue = inputField.value;
-    const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex]));
+    const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex].pattern));
     // console.log(inputValue, currentPattern[currentKeyIndex]);
     if (inputValue === currentPattern[currentKeyIndex]) {
         correctCount++;
         currentKeyIndex++;
-        echoText += `<span class="char">${replaceSpaces(inputValue)}</span>`; // 正解の場合にエコーバックテキストを追加
-        inputField.value = ''; // 正解の場合にのみクリア
-        incorrectIndices.delete(currentKeyIndex - 1); // 正解したら間違いインデックスを削除
+        echoText += `<span class="char">${replaceSpaces(inputValue)}</span>`;
+        inputField.value = '';
+        incorrectIndices.delete(currentKeyIndex - 1);
     } else {
         incorrectIndices.add(currentKeyIndex); // 間違いインデックスを追加
     }
@@ -105,9 +165,17 @@ function handleInput() {
         echoText = ''; // 新しいパターンに進むときにエコーバックテキストをクリア
         echoDiv.innerHTML = '<span class="cursor">|</span>'; // 新しいパターンに進むときにエコーバックをクリアし、アンダースコアを表示
         incorrectIndices.clear(); // 新しいパターンに進むときにクリア
-        if (currentPatternIndex === patterns.length) {
-            showFinalResult();
-            return;
+        if (currentPatternIndex === Math.min((currentStep + 1) * stepSize, patterns.length)) {
+            saveStepAccuracy(); // ステップごとの正解率を保存
+            currentStep++;
+            clearPatternCounterContainer(); // ステップが切り替わるごとにパターンカウンターコンテナをクリア
+            if (currentPatternIndex === patterns.length) {
+                showFinalResult();
+                return;
+            }
+            alert('次のステップに進みます');
+            correctCount = 0; // ステップごとに正解数をリセット
+            totalCount = 0; // ステップごとに総数をリセット
         }
     }
     updateTarget();
@@ -125,7 +193,7 @@ document.addEventListener('click', () => {
 fetch('pattern.json')
     .then(response => response.json())
     .then(data => {
-        patterns = data.patterns;
+        patterns = data.steps.flatMap(step => step.patterns.map(pattern => ({ pattern, stepname: step.stepname })));
         updateTarget();
         echoDiv.innerHTML = '<span class="cursor">_</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
         updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新

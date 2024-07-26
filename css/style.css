@@ -15,8 +15,14 @@ body {
 
 #pattern-counter-container {
     display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#step-name, #pattern-counter, #accuracy-display {
+    flex: 1;
+    text-align: center;
 }
 
 #pattern-counter {
