@@ -97,13 +97,13 @@ function handleInput() {
     } else {
         incorrectIndices.add(currentKeyIndex); // 間違いインデックスを追加
     }
-    echoDiv.innerHTML = echoText + `<span class="char">${replaceSpaces(inputField.value)}</span><span class="cursor">|</span>`; // 入力値をエコーバック
+    echoDiv.innerHTML = echoText + `<span class="char">${replaceSpaces(inputField.value)}</span><span class="cursor blink">|</span>`; // 入力値をエコーバック
     totalCount++;
     if (currentKeyIndex === currentPattern.length) {
         currentPatternIndex++;
         currentKeyIndex = 0;
         echoText = ''; // 新しいパターンに進むときにエコーバックテキストをクリア
-        echoDiv.innerHTML = '<span class="cursor">|</span>'; // 新しいパターンに進むときにエコーバックをクリアし、アンダースコアを表示
+        echoDiv.innerHTML = '<span class="cursor blink">|</span>'; // 新しいパターンに進むときにエコーバックをクリアし、アンダースコアを表示
         incorrectIndices.clear(); // 新しいパターンに進むときにクリア
         if (currentPatternIndex === patterns.length) {
             showFinalResult();
@@ -121,18 +121,30 @@ document.addEventListener('click', () => {
     inputField.focus();
 });
 
+// inputがフォーカスを得たときにcursorクラスを追加
+inputField.addEventListener('focus', () => {
+    document.querySelector('.cursor').classList.add('blink');
+    console.log('add');
+});
+
+// inputがフォーカスを失ったときにcursorクラスを削除
+inputField.addEventListener('blur', () => {
+    document.querySelector('.cursor').classList.remove('blink');
+    console.log('remove');
+});
+
 // pattern.jsonファイルからデータを取得
 fetch('pattern.json')
     .then(response => response.json())
     .then(data => {
         patterns = data.patterns;
         updateTarget();
-        echoDiv.innerHTML = '<span class="cursor">_</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
+        echoDiv.innerHTML = '<span class="cursor blink">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
         updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
         updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新
     })
     .catch(error => console.error('Error loading patterns:', error));
 
-echoDiv.innerHTML = '<span class="cursor">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
+echoDiv.innerHTML = '<span class="cursor blink">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
 updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
 updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新

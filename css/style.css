@@ -89,13 +89,10 @@ body {
 
 .cursor {
     color: black; /* アンダースコアの色を設定 */
-
 }
 
-.cursor {
+.blink {
     display: inline-block;
-    /* width: 1ch; */
-    /* background-color: black; */
     animation: blink 1s steps(2, start) infinite;
 }
 
