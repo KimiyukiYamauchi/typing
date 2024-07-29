@@ -139,8 +139,8 @@ function handleInput() {
     } else {
         incorrectIndices.add(currentKeyIndex);
     }
-    echoDiv.innerHTML = echoText + `<span class="char">${replaceSpaces(inputField.value)}</span><span class="cursor blink">|</span>`; // 入力値をエコーバック
     totalCount++;
+    echoDiv.innerHTML = echoText + `<span class="char">${replaceSpaces(inputField.value)}</span><span class="cursor blink">|</span>`; // 入力値をエコーバック
     if (currentKeyIndex === currentPattern.length) {
         currentPatternIndex++;
         currentKeyIndex = 0;
@@ -173,13 +173,11 @@ document.addEventListener('click', () => {
 // inputがフォーカスを得たときにcursorクラスを追加
 inputField.addEventListener('focus', () => {
     document.querySelector('.cursor').classList.add('blink');
-    console.log('add');
 });
 
 // inputがフォーカスを失ったときにcursorクラスを削除
 inputField.addEventListener('blur', () => {
     document.querySelector('.cursor').classList.remove('blink');
-    console.log('remove');
 });
 
 // pattern.jsonファイルからデータを取得
