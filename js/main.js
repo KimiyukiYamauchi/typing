@@ -116,6 +116,7 @@ function showFinalResult() {
     inputField.classList.add('hidden'); // #inputを非表示にする
     patternCounterDiv.classList.add('hidden'); // #pattern-counterを非表示にする
     accuracyDisplayDiv.classList.add('hidden'); // 正解率表示エリアを非表示にする
+    stepNameDiv.classList.add('hidden'); // #step-nameを非表示にする
     document.querySelector('h1').classList.add('hidden'); // タイトルを非表示にする
     document.querySelector('p').classList.add('hidden'); // 注意事項を非表示にする
     inputField.removeEventListener('input', handleInput); // キー入力を受け付けないようにする
