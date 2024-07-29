@@ -49,7 +49,6 @@ let incorrectIndices = new Set();
 let echoText = '';
 
 // ステップサイズ
-// let stepSize = 10; // ステップサイズを10に設定
 let stepSize = 2; // debug
 
 // 現在のステップ
@@ -91,23 +90,8 @@ function updatePatternCounter() {
 
 function updateAccuracyDisplay() {
     let accuracyText = '正答率: ー';
-    const stepPatterns = patterns.filter(p => p.stepname === patterns[currentPatternIndex].stepname);
-    console.log(stepPatterns);
-    const stepTotalCount = stepPatterns.reduce((acc, p, index) => {
-        if (index < currentPatternIndex) {
-            acc += p.totalCount || 0;
-        }
-        return acc;
-    }, totalCount);
-    const stepCorrectCount = stepPatterns.reduce((acc, p, index) => {
-        if (index < currentPatternIndex) {
-            acc += p.correctCount || 0;
-        }
-        return acc;
-    }, correctCount);
-
-    if (stepTotalCount > 0) {
-        const accuracy = (stepCorrectCount / stepTotalCount) * 100;
+    if (totalCount > 0) {
+        const accuracy = (correctCount / totalCount) * 100;
         accuracyText = `正答率: ${accuracy.toFixed(2)}%`;
     }
     accuracyDisplayDiv.textContent = accuracyText;
@@ -122,8 +106,6 @@ function saveStepAccuracy() {
     const accuracy = (correctCount / totalCount) * 100;
     stepAccuracy[currentStep] = accuracy.toFixed(2);
     localStorage.setItem('stepAccuracy', JSON.stringify(stepAccuracy));
-    // patterns[currentPatternIndex].totalCount = totalCount;
-    // patterns[currentPatternIndex].correctCount = correctCount;
 }
 
 function showFinalResult() {
@@ -147,7 +129,6 @@ function clearPatternCounterContainer() {
 function handleInput() {
     const inputValue = inputField.value;
     const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex].pattern));
-    // console.log(inputValue, currentPattern[currentKeyIndex]);
     if (inputValue === currentPattern[currentKeyIndex]) {
         correctCount++;
         currentKeyIndex++;
@@ -155,31 +136,31 @@ function handleInput() {
         inputField.value = '';
         incorrectIndices.delete(currentKeyIndex - 1);
     } else {
-        incorrectIndices.add(currentKeyIndex); // 間違いインデックスを追加
+        incorrectIndices.add(currentKeyIndex);
     }
-    echoDiv.innerHTML = echoText + `<span class="char">${replaceSpaces(inputField.value)}</span><span class="cursor">|</span>`; // 入力値をエコーバック
+    echoDiv.innerHTML = echoText + `<span class="char">${replaceSpaces(inputField.value)}</span><span class="cursor">|</span>`;
     totalCount++;
     if (currentKeyIndex === currentPattern.length) {
         currentPatternIndex++;
         currentKeyIndex = 0;
-        echoText = ''; // 新しいパターンに進むときにエコーバックテキストをクリア
-        echoDiv.innerHTML = '<span class="cursor">|</span>'; // 新しいパターンに進むときにエコーバックをクリアし、アンダースコアを表示
-        incorrectIndices.clear(); // 新しいパターンに進むときにクリア
+        echoText = '';
+        echoDiv.innerHTML = '<span class="cursor">|</span>';
+        incorrectIndices.clear();
         if (currentPatternIndex === Math.min((currentStep + 1) * stepSize, patterns.length)) {
-            saveStepAccuracy(); // ステップごとの正解率を保存
+            saveStepAccuracy();
             currentStep++;
-            clearPatternCounterContainer(); // ステップが切り替わるごとにパターンカウンターコンテナをクリア
+            clearPatternCounterContainer();
             if (currentPatternIndex === patterns.length) {
                 showFinalResult();
                 return;
             }
             alert('次のステップに進みます');
-            correctCount = 0; // ステップごとに正解数をリセット
-            totalCount = 0; // ステップごとに総数をリセット
+            correctCount = 0;
+            totalCount = 0;
         }
     }
     updateTarget();
-    inputField.focus(); // 入力フィールドにフォーカスを戻す
+    inputField.focus();
 }
 
 inputField.addEventListener('input', handleInput);
