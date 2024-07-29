@@ -155,7 +155,6 @@ function handleInput() {
                 showFinalResult();
                 return;
             }
-            alert('次のステップに進みます');
             correctCount = 0;
             totalCount = 0;
         }
