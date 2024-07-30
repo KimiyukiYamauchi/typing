@@ -191,7 +191,3 @@ fetch('pattern.json')
         updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新
     })
     .catch(error => console.error('Error loading patterns:', error));
-
-echoDiv.innerHTML = '<span class="cursor blink">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
-updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
-updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新
