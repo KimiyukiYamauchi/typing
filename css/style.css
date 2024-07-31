@@ -13,6 +13,26 @@ body {
     margin: 0 auto;
 }
 
+#menu {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#menu table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#menu th, #menu td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#menu th {
+    background-color: #f2f2f2;
+}
+
 #pattern-counter-container {
     display: flex;
     justify-content: space-between;
@@ -66,15 +86,6 @@ body {
     position: absolute;
     left: -9999px; /* 見えない位置に移動 */
     z-index: -1; /* フォーカスを受け取るためにz-indexを設定 */
-}
-
-#result {
-    font-size: 48px; /* 大きく表示 */
-    text-align: center; /* 中央揃え */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .correct {

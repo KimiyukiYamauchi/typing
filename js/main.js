@@ -60,10 +60,13 @@ let stepAccuracy = {};
 const targetDiv = document.getElementById('target');
 const echoDiv = document.getElementById('echo'); // 新しいdivを取得
 const inputField = document.getElementById('input');
-const resultDiv = document.getElementById('result');
 const patternCounterDiv = document.getElementById('pattern-counter'); // パターンカウンターのdivを取得
 const accuracyDisplayDiv = document.getElementById('accuracy-display'); // 正解率表示エリアを取得
 const stepNameDiv = document.getElementById('step-name'); // ステップ名表示エリアを取得
+const patternCounterContainer = document.getElementById('pattern-counter-container');
+
+const menuDiv = document.getElementById('menu');
+const menuStepsTbody = document.getElementById('menu-steps');
 
 function updateTarget() {
     const currentPattern = stringToArray(toHalfWidth(patterns[currentPatternIndex].pattern));
@@ -103,29 +106,88 @@ function updateStepName() {
 }
 
 function saveStepAccuracy() {
+    const stepname = patterns[currentPatternIndex - 1].stepname;
     const accuracy = (correctCount / totalCount) * 100;
-    stepAccuracy[currentStep] = accuracy.toFixed(2);
+    stepAccuracy[stepname] = accuracy.toFixed(2);
     localStorage.setItem('stepAccuracy', JSON.stringify(stepAccuracy));
 }
 
-function showFinalResult() {
-    const accuracy = (correctCount / totalCount) * 100;
-    resultDiv.innerHTML = `基本入力練習 -英字小文字のみ- :<br>正答率 ${accuracy.toFixed(2)}%`;
-    targetDiv.classList.add('hidden'); // #targetを非表示にする
-    echoDiv.classList.add('hidden'); // #echoを非表示にする
-    inputField.classList.add('hidden'); // #inputを非表示にする
-    patternCounterDiv.classList.add('hidden'); // #pattern-counterを非表示にする
-    accuracyDisplayDiv.classList.add('hidden'); // 正解率表示エリアを非表示にする
-    stepNameDiv.classList.add('hidden'); // #step-nameを非表示にする
-    document.querySelector('h1').classList.add('hidden'); // タイトルを非表示にする
-    document.querySelector('p').classList.add('hidden'); // 注意事項を非表示にする
-    inputField.removeEventListener('input', handleInput); // キー入力を受け付けないようにする
+function showMenu() {
+    menuDiv.classList.remove('hidden');
+    targetDiv.classList.add('hidden');
+    echoDiv.classList.add('hidden');
+    inputField.classList.add('hidden');
+    patternCounterDiv.classList.add('hidden');
+    accuracyDisplayDiv.classList.add('hidden');
+    stepNameDiv.classList.add('hidden');
+    document.querySelector('h1').classList.add('hidden');
+    document.querySelector('p').classList.add('hidden');
+    document.getElementById('pattern-counter-container').classList.add('hidden');
 }
 
-function clearPatternCounterContainer() {
-    patternCounterDiv.textContent = '';
-    accuracyDisplayDiv.textContent = '';
+function hideMenu() {
+    menuDiv.classList.add('hidden');
+    targetDiv.classList.remove('hidden');
+    echoDiv.classList.remove('hidden');
+    inputField.classList.remove('hidden');
+    patternCounterDiv.classList.remove('hidden');
+    accuracyDisplayDiv.classList.remove('hidden');
+    stepNameDiv.classList.remove('hidden');
+    document.querySelector('h1').classList.remove('hidden');
+    document.querySelector('p').classList.remove('hidden');
+    document.getElementById('pattern-counter-container').classList.remove('hidden');
+    inputField.addEventListener('input', handleInput);
 }
+
+function updateMenu() {
+    menuStepsTbody.innerHTML = '';
+    const stepMap = new Map();
+
+    patterns.forEach((pattern, index) => {
+        if (!stepMap.has(pattern.stepname)) {
+            stepMap.set(pattern.stepname, []);
+        }
+        stepMap.get(pattern.stepname).push(index);
+    });
+
+    stepMap.forEach((indices, stepname) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${stepname}</td>
+            <td>ー</td>
+            <td>ー</td>
+            <td>ー</td>
+        `;
+        tr.addEventListener('click', () => {
+            currentPatternIndex = indices[0];
+            currentStep = indices[0];
+            correctCount = 0;
+            totalCount = 0;
+            incorrectIndices.clear();
+            echoText = '';
+            echoDiv.innerHTML = '<span class="cursor blink">|</span>';
+            hideMenu();
+            updateTarget();
+            inputField.focus(); // フォーカスをinputフィールドに移動
+        });
+        menuStepsTbody.appendChild(tr);
+    });
+}
+
+// 画面をクリックするとinputにフォーカスする処理を追加
+document.addEventListener('click', () => {
+    inputField.focus();
+});
+
+// inputがフォーカスを得たときにcursorクラスを追加
+inputField.addEventListener('focus', () => {
+    document.querySelector('.cursor').classList.add('blink');
+});
+
+// inputがフォーカスを失ったときにcursorクラスを削除
+inputField.addEventListener('blur', () => {
+    document.querySelector('.cursor').classList.remove('blink');
+});
 
 function handleInput() {
     const inputValue = inputField.value;
@@ -147,47 +209,24 @@ function handleInput() {
         echoText = '';
         echoDiv.innerHTML = '<span class="cursor blink">|</span>';
         incorrectIndices.clear();
-        if (currentPatternIndex === Math.min((currentStep + 1) * stepSize, patterns.length)) {
+        if (currentPatternIndex === patterns.length || patterns[currentPatternIndex].stepname !== patterns[currentPatternIndex - 1].stepname) {
             saveStepAccuracy();
-            currentStep++;
-            clearPatternCounterContainer();
-            if (currentPatternIndex === patterns.length) {
-                showFinalResult();
-                return;
-            }
-            correctCount = 0;
-            totalCount = 0;
+            inputField.removeEventListener('input', handleInput);
+            showMenu();
+            return;
         }
+        updateTarget();
     }
     updateTarget();
     inputField.focus();
 }
-
-inputField.addEventListener('input', handleInput);
-
-// 画面をクリックするとinputにフォーカスする処理を追加
-document.addEventListener('click', () => {
-    inputField.focus();
-});
-
-// inputがフォーカスを得たときにcursorクラスを追加
-inputField.addEventListener('focus', () => {
-    document.querySelector('.cursor').classList.add('blink');
-});
-
-// inputがフォーカスを失ったときにcursorクラスを削除
-inputField.addEventListener('blur', () => {
-    document.querySelector('.cursor').classList.remove('blink');
-});
 
 // pattern.jsonファイルからデータを取得
 fetch('pattern.json')
     .then(response => response.json())
     .then(data => {
         patterns = data.steps.flatMap(step => step.patterns.map(pattern => ({ pattern, stepname: step.stepname })));
-        updateTarget();
-        echoDiv.innerHTML = '<span class="cursor blink">|</span>'; // 最初のパターンが表示されるタイミングでアンダースコアを表示
-        updatePatternCounter(); // 最初のパターンが表示されるタイミングでパターンカウンターを更新
-        updateAccuracyDisplay(); // 最初のパターンが表示されるタイミングで正解率表示を更新
+        updateMenu();
+        showMenu();
     })
     .catch(error => console.error('Error loading patterns:', error));
