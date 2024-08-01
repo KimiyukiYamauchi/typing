@@ -2,14 +2,15 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="英字小文字のタイピング練習アプリケーション">
     <title>タイピング練習</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container" role="main">
         <h1>基本入力練習 -英字小文字のみ-</h1>
         <p>注意：█は半角スペースを表します</p>
-        <div id="menu">
+        <div id="menu" role="navigation">
             <table>
                 <thead>
                     <tr>
@@ -24,14 +25,14 @@
                 </tbody>
             </table>
         </div>
-        <div id="pattern-counter-container" class="hidden">
+        <div id="pattern-counter-container" class="hidden" role="status">
             <div id="step-name"></div>
             <div id="pattern-counter"></div>
             <div id="accuracy-display"></div>
         </div>
-        <div id="target"></div>
-        <div id="echo"></div>
-        <input type="text" id="input" autofocus>
+        <div id="target" role="region" aria-label="タイピング対象"></div>
+        <div id="echo" role="region" aria-label="ユーザー入力"></div>
+        <input type="text" id="input" autofocus aria-label="タイピング入力欄">
     </div>
     <script src="js/main.js"></script>
     <script>
