@@ -94,8 +94,19 @@ class TypingGame {
     saveStepAccuracy() {
         const stepname = this.patterns[this.currentPatternIndex - 1].stepname;
         const accuracy = (this.correctCount / this.totalCount) * 100;
-        this.stepAccuracy[stepname] = accuracy.toFixed(2);
-        localStorage.setItem('stepAccuracy', JSON.stringify(this.stepAccuracy));
+        const newAccuracy = parseFloat(accuracy.toFixed(2));
+
+        // ローカルストレージから既存のデータを取得
+        const savedAccuracy = JSON.parse(localStorage.getItem('stepAccuracy')) || {};
+
+        // 新しい正確性が既存のデータより高い場合、または既存のデータがない場合のみ保存
+        if (!savedAccuracy[stepname] || newAccuracy > parseFloat(savedAccuracy[stepname])) {
+            savedAccuracy[stepname] = newAccuracy.toString();
+            localStorage.setItem('stepAccuracy', JSON.stringify(savedAccuracy));
+        }
+
+        // クラスのプロパティも更新
+        this.stepAccuracy = savedAccuracy;
     }
 
     toggleElementVisibility(show, ...elements) {
