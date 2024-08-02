@@ -8,6 +8,7 @@ class TypingGame {
         this.incorrectIndices = new Set();
         this.echoText = '';
         this.stepAccuracy = {};
+        this.startTime = null; // Added
         this.handleInputBound = this.handleInput.bind(this);
 
         this.initializeElements();
@@ -21,6 +22,7 @@ class TypingGame {
         this.patternCounterDiv = document.getElementById('pattern-counter');
         this.accuracyDisplayDiv = document.getElementById('accuracy-display');
         this.stepNameDiv = document.getElementById('step-name');
+        this.speedDisplayDiv = document.getElementById('speed-display'); // Added
         this.menuDiv = document.getElementById('menu');
         this.menuStepsTbody = document.getElementById('menu-steps');
 
@@ -95,13 +97,20 @@ class TypingGame {
         const stepname = this.patterns[this.currentPatternIndex - 1].stepname;
         const accuracy = (this.correctCount / this.totalCount) * 100;
         const newAccuracy = parseFloat(accuracy.toFixed(2));
+        const elapsedTime = (Date.now() - this.startTime); // ステップ実行中の経過時間
+        const keyPressTime = (elapsedTime/this.correctCount).toFixed(2); // 1キーの入力にかかる時間
+        const keysPerMinute = (60*1000/keyPressTime).toFixed(2);    // 1分あたりのキー入力数
+        this.startTime = null;
 
         // ローカルストレージから既存のデータを取得
         const savedAccuracy = JSON.parse(localStorage.getItem('stepAccuracy')) || {};
 
         // 新しい正確性が既存のデータより高い場合、または既存のデータがない場合のみ保存
-        if (!savedAccuracy[stepname] || newAccuracy > parseFloat(savedAccuracy[stepname])) {
-            savedAccuracy[stepname] = newAccuracy.toString();
+        if (!savedAccuracy[stepname] || newAccuracy > parseFloat(savedAccuracy[stepname].accuracy)) {
+            savedAccuracy[stepname] = {
+                accuracy: newAccuracy.toString(),
+                keysPerMinute: keysPerMinute.toString()
+            };
             localStorage.setItem('stepAccuracy', JSON.stringify(savedAccuracy));
             
             // クラスのプロパティも更新
@@ -118,14 +127,14 @@ class TypingGame {
     }
 
     showMenu() {
-        this.toggleElementVisibility(false, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
+        this.toggleElementVisibility(false, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, this.speedDisplayDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
         this.updateMenu(); // メニューを更新
         this.toggleElementVisibility(true, this.menuDiv);
         this.inputField.removeEventListener('input', this.handleInputBound);
     }
 
     hideMenu() {
-        this.toggleElementVisibility(true, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
+        this.toggleElementVisibility(true, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, this.speedDisplayDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
         this.toggleElementVisibility(false, this.menuDiv);
         this.inputField.removeEventListener('input', this.handleInputBound);
         this.inputField.addEventListener('input', this.handleInputBound);
@@ -146,12 +155,15 @@ class TypingGame {
             stepMap.get(pattern.stepname).push(index);
         });
 
+        // console.table(savedAccuracy);
+
         stepMap.forEach((indices, stepname) => {
             const tr = document.createElement('tr');
-            const accuracy = savedAccuracy[stepname] ? `${savedAccuracy[stepname]}%` : 'ー';
+            const accuracy = savedAccuracy[stepname] ? `${savedAccuracy[stepname].accuracy}%` : 'ー';
+            const speed = savedAccuracy[stepname] ? `${savedAccuracy[stepname].keysPerMinute} 文字/分` : 'ー';
             tr.innerHTML = `
                 <td>${stepname}</td>
-                <td>ー</td>
+                <td>${speed}</td>
                 <td>${accuracy}</td>
                 <td>ー</td>
             `;
@@ -175,6 +187,10 @@ class TypingGame {
     }
 
     handleInput() {
+        if (!this.startTime) {
+            this.startTime = Date.now(); // タイピング開始時間を記録
+        }
+
         const inputValue = this.inputField.value;
         const currentPattern = stringToArray(toHalfWidth(this.patterns[this.currentPatternIndex].pattern));
         if (inputValue === currentPattern[this.currentKeyIndex]) {
@@ -197,12 +213,26 @@ class TypingGame {
             if (this.currentPatternIndex === this.patterns.length || this.patterns[this.currentPatternIndex].stepname !== this.patterns[this.currentPatternIndex - 1].stepname) {
                 this.saveStepAccuracy();
                 this.showMenu();
+                this.startTime = null;  // startTimeをリセット
                 return;
             }
             this.updateTarget();
         }
         this.updateTarget();
+        this.updateSpeedDisplay(); // スピード表示を更新
         this.inputField.focus();
+    }
+
+    updateSpeedDisplay() {
+        console.log('updateSpeedDisplay');
+        let keysPerMinute = '-';
+        if (this.startTime) {
+            const elapsedTime = (Date.now() - this.startTime); // ステップ実行中の経過時間
+            const keyPressTime = this.correctCount > 5 ? 
+            (elapsedTime/this.correctCount).toFixed(2) : 0; // 1キーの入力にかかる時間
+            keysPerMinute = keyPressTime > 0 ? (60*1000/keyPressTime).toFixed(2) : '-';
+        }
+        this.speedDisplayDiv.textContent = `スピード: ${keysPerMinute} 文字/分`;
     }
 }
 

@@ -52,20 +52,15 @@ body {
   margin-bottom: 20px;
 }
 
-#step-name, #pattern-counter, #accuracy-display {
+#step-name, #pattern-counter, #speed-display, #accuracy-display {
   flex: 1;
   text-align: center;
 }
 
-#pattern-counter {
+#pattern-counter, #speed-display, #accuracy-display {
   font-size: 20px;
   text-align: center;
   margin-right: 20px; /* 右側に余白を追加 */
-}
-
-#accuracy-display {
-  font-size: 20px;
-  text-align: center;
 }
 
 #target, #echo {
