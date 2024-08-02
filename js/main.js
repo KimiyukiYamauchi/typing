@@ -103,10 +103,13 @@ class TypingGame {
         if (!savedAccuracy[stepname] || newAccuracy > parseFloat(savedAccuracy[stepname])) {
             savedAccuracy[stepname] = newAccuracy.toString();
             localStorage.setItem('stepAccuracy', JSON.stringify(savedAccuracy));
+            
+            // クラスのプロパティも更新
+            this.stepAccuracy = savedAccuracy;
+            
+            // メニューを更新
+            this.updateMenu();
         }
-
-        // クラスのプロパティも更新
-        this.stepAccuracy = savedAccuracy;
     }
 
     toggleElementVisibility(show, ...elements) {
@@ -116,6 +119,7 @@ class TypingGame {
 
     showMenu() {
         this.toggleElementVisibility(false, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
+        this.updateMenu(); // メニューを更新
         this.toggleElementVisibility(true, this.menuDiv);
         this.inputField.removeEventListener('input', this.handleInputBound);
     }
@@ -132,6 +136,9 @@ class TypingGame {
         const fragment = document.createDocumentFragment();
         const stepMap = new Map();
 
+        // ローカルストレージから保存された正確性データを取得
+        const savedAccuracy = JSON.parse(localStorage.getItem('stepAccuracy')) || {};
+
         this.patterns.forEach((pattern, index) => {
             if (!stepMap.has(pattern.stepname)) {
                 stepMap.set(pattern.stepname, []);
@@ -141,10 +148,11 @@ class TypingGame {
 
         stepMap.forEach((indices, stepname) => {
             const tr = document.createElement('tr');
+            const accuracy = savedAccuracy[stepname] ? `${savedAccuracy[stepname]}%` : 'ー';
             tr.innerHTML = `
                 <td>${stepname}</td>
                 <td>ー</td>
-                <td>ー</td>
+                <td>${accuracy}</td>
                 <td>ー</td>
             `;
             tr.addEventListener('click', () => {
@@ -167,7 +175,6 @@ class TypingGame {
     }
 
     handleInput() {
-        console.log('handleInput called', this.inputField.value);
         const inputValue = this.inputField.value;
         const currentPattern = stringToArray(toHalfWidth(this.patterns[this.currentPatternIndex].pattern));
         if (inputValue === currentPattern[this.currentKeyIndex]) {
