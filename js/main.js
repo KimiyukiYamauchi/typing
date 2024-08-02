@@ -71,6 +71,7 @@ class TypingGame {
         this.updatePatternCounter();
         this.updateAccuracyDisplay();
         this.updateStepName();
+        this.updateSpeedDisplay();
     }
 
     updatePatternCounter() {
@@ -213,18 +214,15 @@ class TypingGame {
             if (this.currentPatternIndex === this.patterns.length || this.patterns[this.currentPatternIndex].stepname !== this.patterns[this.currentPatternIndex - 1].stepname) {
                 this.saveStepAccuracy();
                 this.showMenu();
-                this.startTime = null;  // startTimeをリセット
                 return;
             }
             this.updateTarget();
         }
         this.updateTarget();
-        this.updateSpeedDisplay(); // スピード表示を更新
         this.inputField.focus();
     }
 
     updateSpeedDisplay() {
-        console.log('updateSpeedDisplay');
         let keysPerMinute = '-';
         if (this.startTime) {
             const elapsedTime = (Date.now() - this.startTime); // ステップ実行中の経過時間
