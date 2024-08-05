@@ -3,43 +3,81 @@
     {
       "stepname": "チャレンジ",
       "patterns": [
-        "ａｂｃｄ　ｅｆｇ　ｈｉｊｋ　ｌｍｎ　ｏｐｑｒ　ｓｔｕ　ｖｗ　ｘｙｚ",
-        "ｘｙｚ　ｖｗ　ｓｔｕ　ｏｐｑｒ　ｌｍｎ　ｈｉｊｋ　ｅｆｇ　ａｂｃｄ"
+        "abcd efg hijk lmn opqr stu vw xyz",
+        "xyz vw stu opqr lmn hijk efg abcd",
+        "abcd xyz efg vw hijk stu lmn opqr",
+        "zyx wv uts rqpo nml kjih gfe dcba",
+        "zy dcba wv gfe rqpo kjih nml uts"
       ]
     },
     {
       "stepname": "ａ～ｇ",
       "patterns": [
-        "ａａａａａ　ｂｂｂｂｂ　ａａｂｂａａｂｂ　ａｂａｂａｂ",
-        "ａｂｃｄｅｆｇ　ａｂｃｄｅｆｇ　ａｂｃｄｅｆｇ　ａｂｃｄｅｆｇ"
+        "aaa bbb ccc ddd eee fff ggg",
+        "abcdefg abcdefg abcdefg abcdefg",
+        "abbdefg abccefg abcddfg abcdeeg",
+        "gfedcba gfedcba gfedcba gfedcba",
+        "agbfced decfbga agbfced decfbga"
       ]
     },
     {
       "stepname": "ｈ～ｎ",
       "patterns": [
-        "ｈｈｈｈｈ　ａａｂｂｃｃｄｄｅｅｆｆｇｇｈｈ　ｆｆｇｇｈｈ",
-        "ｈｉｊｋｌｍｎ　ｈｉｊｋｌｍｎ　ｈｉｊｋｌｍｎ"
+        "hhh iii jjj kkk lll mmm nnn",
+        "hijklmn hijklmn hijklmn hijklmn",
+        "nmlkjih nmlkjih nmlkjih nmlkjih",
+        "hnimjlh hnimjlh hnimjlh hnimjlh",
+        "anbicjdkelfmgn anbicjdkelfmgn"
       ]
     },
     {
       "stepname": "ｏ～ｕ",
       "patterns": [
-        "ooooooo opqrstu opqrstu opqrstu",
-        "utrqpo utrqpo utrqpo utrqpo"
+        "ooo ppp qqq rrr sss ttt uuu",
+        "opqrstu opqrstu opqrstu opqrstu",
+        "utrqpo utrqpo utrqpo utrqpo utrqpo",
+        "aho bip cjq dkr els fmt gnu aho",
+        "gnu fmt els dkr cjq bip aho gnu"
       ]
     },
     {
       "stepname": "ｖ～ｚ",
       "patterns": [
+        "vvv www xxx yyy zzz",
         "vwxyz vwxyz vwxyz vwxyz",
-        "zyxwv zyxwv zyxwv zyxwv"
+        "zyxwv zyxwv zyxwv zyxwv xwxwv",
+        "ahov bipw cjqx dkry elsz fmtv gnuw",
+        "gnuw fmtv elsz dkry cjqx bipw ahov"
       ]
     },
     {
       "stepname": "確認テスト",
       "patterns": [
-        "abcddefg hijklmn opqrstu vwxyz",
-        "zyxwv utsrqpo mnlkijh gfedcba"
+        "abcdefg hijklmn opqrstu vwxyz",
+        "zyxwv utsrqpo mnlkijh gfedcba",
+        "abccdefg hijjklmn oppqrstu vwxxyz",
+        "zyxxwv utsrqppo nmlkjjih gfedccba",
+        "abcdefg hijklmn opqrstu vwxyz"
+      ]
+    },
+    {
+      "stepname": "C言語①",
+      "patterns": [
+        "include <stdio.h>",
+        "main()",
+        "{",
+        "printf(\"Hello\\nWorld!\\n\");",
+        "}"
+      ]
+    },
+    {
+      "stepname": "C言語②",
+      "patterns": [
+        "include <stdio.h>",
+        "main()",
+        "{",
+        "printf(\"%d-%d is %d.\\n\", 3, 2, 3-2);",
+        "}"
       ]
     }
   ]
