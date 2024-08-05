@@ -12,6 +12,7 @@ class TypingGame {
         this.handleInputBound = this.handleInput.bind(this);
 
         this.initializeElements();
+        this.hideTypingElements(); // タイピング画面を初期化時に隠す
         this.loadPatterns();
     }
 
@@ -27,6 +28,11 @@ class TypingGame {
         this.menuStepsTbody = document.getElementById('menu-steps');
 
         document.addEventListener('click', () => this.inputField.focus());
+    }
+
+    hideTypingElements() {
+        this.toggleElementVisibility(false, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, this.speedDisplayDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
+        this.toggleElementVisibility(true, this.menuDiv);
     }
 
     async loadPatterns() {
