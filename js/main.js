@@ -223,12 +223,12 @@ class TypingGame {
     }
 
     updateSpeedDisplay() {
-        let keysPerMinute = '-';
+        let keysPerMinute = '―';
         if (this.startTime) {
             const elapsedTime = (Date.now() - this.startTime); // ステップ実行中の経過時間
-            const keyPressTime = this.correctCount > 5 ? 
+            const keyPressTime = this.correctCount > 2 ? 
             (elapsedTime/this.correctCount).toFixed(2) : 0; // 1キーの入力にかかる時間
-            keysPerMinute = keyPressTime > 0 ? (60*1000/keyPressTime).toFixed(2) : '-';
+            keysPerMinute = keyPressTime > 0 ? (60*1000/keyPressTime).toFixed(2) : '―';
         }
         this.speedDisplayDiv.textContent = `スピード: ${keysPerMinute} 文字/分`;
     }
