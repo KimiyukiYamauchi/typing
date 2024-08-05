@@ -162,11 +162,25 @@ class TypingGame {
             const tr = document.createElement('tr');
             const accuracy = savedAccuracy[stepname] ? `${savedAccuracy[stepname].accuracy}%` : 'ー';
             const speed = savedAccuracy[stepname] ? `${savedAccuracy[stepname].keysPerMinute} 文字/分` : 'ー';
+            let judgement = 'ー';
+            let judgementClass = ''; // デフォルトは空  
+
+            if (savedAccuracy[stepname]) {
+                if (parseFloat(savedAccuracy[stepname].accuracy) >= 90 && 
+                        parseFloat(savedAccuracy[stepname].keysPerMinute) >= 120) {
+                    judgement = '〇';
+                    judgementClass = 'correct'; // 青文字
+                } else {
+                    judgement = '×';
+                    judgementClass = 'incorrect'; // 赤文字
+                }
+            }
+
             tr.innerHTML = `
                 <td>${stepname}</td>
                 <td>${speed}</td>
                 <td>${accuracy}</td>
-                <td>ー</td>
+                <td class="${judgementClass}">${judgement}</td>
             `;
             tr.addEventListener('click', () => {
                 this.currentPatternIndex = indices[0];

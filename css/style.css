@@ -45,6 +45,11 @@ body {
   background-color: #f2f2f2;
 }
 
+#menu tr:hover {
+  background-color: #f2f2f2; /* 薄い灰色の背景色 */
+  cursor: pointer; /* リンク可能の形状 */
+}
+
 #pattern-counter-container {
   display: flex;
   justify-content: space-between;
