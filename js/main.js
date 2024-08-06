@@ -26,6 +26,7 @@ class TypingGame {
         this.speedDisplayDiv = document.getElementById('speed-display'); // Added
         this.menuDiv = document.getElementById('menu');
         this.menuStepsTbody = document.getElementById('menu-steps');
+        this.containerDiv = document.querySelector('.container'); // Added
 
         document.addEventListener('click', () => this.inputField.focus());
     }
@@ -45,6 +46,7 @@ class TypingGame {
             this.patterns = data.steps.flatMap(step => step.patterns.map(pattern => ({ pattern, stepname: step.stepname })));
             this.updateMenu();
             this.showMenu();
+            this.containerDiv.classList.remove('hidden'); // パターンの読み込み後に表示
         } catch (error) {
             console.error('Error loading patterns:', error);
             let errorMessage = 'パターンの読み込み中にエラーが発生しました。';
