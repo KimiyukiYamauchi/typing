@@ -114,8 +114,10 @@ class TypingGame {
         // ローカルストレージから既存のデータを取得
         const savedAccuracy = JSON.parse(localStorage.getItem('stepAccuracy')) || {};
 
-        // 新しい正確性が既存のデータより高い場合、または既存のデータがない場合のみ保存
-        if (!savedAccuracy[stepname] || newAccuracy > parseFloat(savedAccuracy[stepname].accuracy)) {
+        // 既存のデータがない場合または新しい正確性、スピードが既存のデータより高い場合のみ保存
+        if (!savedAccuracy[stepname] ||
+             newAccuracy > parseFloat(savedAccuracy[stepname].accuracy) ||
+             keysPerMinute > parseFloat(savedAccuracy[stepname].keysPerMinute)) {
             savedAccuracy[stepname] = {
                 accuracy: newAccuracy.toString(),
                 keysPerMinute: keysPerMinute.toString()
