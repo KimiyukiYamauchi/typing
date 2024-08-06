@@ -27,8 +27,15 @@ class TypingGame {
         this.menuDiv = document.getElementById('menu');
         this.menuStepsTbody = document.getElementById('menu-steps');
         this.containerDiv = document.querySelector('.container'); // Added
+        this.cancelButton = document.getElementById('cancel-button'); // Added
 
         document.addEventListener('click', () => this.inputField.focus());
+
+        // 中断ボタンのクリックイベントを追加
+        this.cancelButton.addEventListener('click', () => this.cancelTyping());
+
+        // 初期化時にメニューを表示し、タイピング画面を隠す
+        // this.showMenu();
     }
 
     hideTypingElements() {
@@ -137,15 +144,30 @@ class TypingGame {
         elements.forEach(el => el.classList[method]('hidden'));
     }
 
+    cancelTyping() {
+        this.resetTypingState(); // タイピング状態をリセット
+        this.showMenu();
+    }
+
+    resetTypingState() {
+        this.currentKeyIndex = 0;
+        this.correctCount = 0;
+        this.totalCount = 0;
+        this.incorrectIndices.clear();
+        this.echoText = '';
+        this.targetDiv.innerHTML = '';
+        this.echoDiv.innerHTML = '<span class="cursor blink">|</span>';
+    }
+
     showMenu() {
-        this.toggleElementVisibility(false, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, this.speedDisplayDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
+        this.toggleElementVisibility(false, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, this.speedDisplayDiv, this.cancelButton,document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
         this.updateMenu(); // メニューを更新
         this.toggleElementVisibility(true, this.menuDiv);
         this.inputField.removeEventListener('input', this.handleInputBound);
     }
 
     hideMenu() {
-        this.toggleElementVisibility(true, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, this.speedDisplayDiv, document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
+        this.toggleElementVisibility(true, this.targetDiv, this.echoDiv, this.inputField, this.patternCounterDiv, this.accuracyDisplayDiv, this.stepNameDiv, this.speedDisplayDiv, this.cancelButton,document.querySelector('h1'), document.querySelector('p'), document.getElementById('pattern-counter-container'));
         this.toggleElementVisibility(false, this.menuDiv);
         this.inputField.removeEventListener('input', this.handleInputBound);
         this.inputField.addEventListener('input', this.handleInputBound);
