@@ -43,8 +43,8 @@
     {
       "stepname": "ｖ～ｚ",
       "patterns": [
-        "vvv www xxx yyy zzz",
-        "vwxyz vwxyz vwxyz vwxyz",
+        "vvv www xxx yyy zzz vvw vvx vvy vvz",
+        "vwxyz vwxyz vwxyz vwxyz vwxyz",
         "zyxwv zyxwv zyxwv zyxwv xwxwv",
         "ahov bipw cjqx dkry elsz fmtv gnuw",
         "gnuw fmtv elsz dkry cjqx bipw ahov"
