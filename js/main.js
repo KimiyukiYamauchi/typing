@@ -198,8 +198,12 @@ class TypingGame {
             let judgementClass = ''; // デフォルトは空  
 
             if (savedAccuracy[stepname]) {
-                if (parseFloat(savedAccuracy[stepname].accuracy) >= 90 && 
-                        parseFloat(savedAccuracy[stepname].keysPerMinute) >= 120) {
+                const acc = parseFloat(savedAccuracy[stepname].accuracy);
+                const kpm = parseFloat(savedAccuracy[stepname].keysPerMinute);
+                if (acc === 100 && kpm >= 120) {
+                    judgement = 'パーフェクト！';
+                    judgementClass = 'perfect'; // 金色の文字に黒の縁取り
+                } else if (acc >= 90 && kpm >= 120) {
                     judgement = '〇';
                     judgementClass = 'correct'; // 青文字
                 } else {

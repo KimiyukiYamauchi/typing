@@ -97,6 +97,12 @@ body {
   color: var(--error-color);
 }
 
+.perfect {
+  color: gold; /* 金色 */
+  text-shadow: 1px 1px 2px black; /* 黒の縁取り */
+  font-weight: bold; /* 太字 */
+}
+
 .next {
   background-color: var(--highlight-color);
 }
