@@ -70,7 +70,7 @@ body {
 
 #target, #echo {
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   height: auto;
   min-height: 30px;
   margin: 0 auto 20px;
