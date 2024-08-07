@@ -157,6 +157,7 @@ class TypingGame {
         this.echoText = '';
         this.targetDiv.innerHTML = '';
         this.echoDiv.innerHTML = '<span class="cursor blink">|</span>';
+        this.startTime = null; // 中断時にstartTimeをリセット
     }
 
     showMenu() {
