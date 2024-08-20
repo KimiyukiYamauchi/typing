@@ -50,7 +50,25 @@ class TypingGame {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+            // console.log(data);
             this.patterns = data.steps.flatMap(step => step.patterns.map(pattern => ({ pattern, stepname: step.stepname })));
+            // let result = data.steps.map(step => {
+            //     // console.log(step);
+            //     // step.patterns.forEach(pattern => {
+            //     //     // console.log(pattern);
+            //     //     console.log({ pattern, stepname: step.stepname });
+            //     // });
+            //     let result = step.patterns.map(pattern => ({ pattern, stepname: step.stepname }));
+            //     // console.log(result);
+            //     return result;
+            // });
+            // let result2 = data.steps.flatMap(step => {
+            //     let result = step.patterns.map(pattern => ({ pattern, stepname: step.stepname }));
+            //     return result;
+            // });
+            // console.log(result);
+            // console.log(result2);
+            // console.log(this.patterns);
             this.updateMenu();
             this.showMenu();
             this.containerDiv.classList.remove('hidden'); // パターンの読み込み後に表示
